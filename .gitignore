@@ -24,3 +24,6 @@ hs_err_pid*
 mochila.iml
 .idea/*
 out/*
+nbproject/*
+/build.xml
+/manifest.mf

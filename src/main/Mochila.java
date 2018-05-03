@@ -2,99 +2,102 @@ package main;
 
 public class Mochila {
 
-	/**
-	 * Construtor vazio
-	 */
-	public Mochila() {
-	}
+    /**
+     * Construtor vazio
+     */
+    public Mochila() {
+    }
 
+    /**
+     * Retorna o valor maximo que pode ser colocado em uma mochila
+     *
+     * <a href = https://dzone.com/articles/knapsack-problem>fonte</a>
+     *
+     * @param pesoDosObjetos
+     * @param valoresDosObjetos
+     * @return
+     */
+    public int mochila(int pesoDosObjetos[], int valoresDosObjetos[], int capacidadeMochila) {
 
-	/**
-	 * Retorna o valor maximo que pode ser colocado em uma mochila
-	 *
-	 * <a href = https://dzone.com/articles/knapsack-problem>fonte</a>
-	 * @param pesoDosObjetos
-	 * @param valoresDosObjetos
-	 * @return
-	 */
-	public int mochila(int pesoDosObjetos[], int valoresDosObjetos[], int capacidadeMochila) {
+        int numObjetos = pesoDosObjetos.length;
 
+        // matriz de soluções: itens estao em linha, pesos são as colunas e o valor da matriz é o valor carregado
+        int[][] matriz = new int[numObjetos + 1][capacidadeMochila + 1];
 
+        // Couluna 0 inicia com 0
+        for (int col = 0; col <= capacidadeMochila; col++) {
 
-		int numObjetos = pesoDosObjetos.length;
+            matriz[0][col] = 0;
 
-//        matriz de soluções: itens estao em linha, pesos são as colunas e o valor da matriz é o valor carregado
-		int[][] matriz = new int[numObjetos + 1][capacidadeMochila + 1];
+        }
 
+        // linha 0 inicia com 0
+        for (int linha = 0; linha <= numObjetos; linha++) {
 
-//      Couluna 0 inicia com 0
-		for (int col = 0; col <= capacidadeMochila; col++) {
+            matriz[linha][0] = 0;
 
-			matriz[0][col] = 0;
+        }
 
-		}
+        // demais elementos
+        // para todos os itens
+        for (int item = 1; item <= numObjetos; item++) {
 
-//        linha 0 inicia com 0
-		for (int linha = 0; linha <= numObjetos; linha++) {
+            //linha a linha
+            for (int peso = 1; peso <= capacidadeMochila; peso++) {
 
-			matriz[linha][0] = 0;
+                
+                // verifica se a mochila aguenta o novo elemento
+                if (pesoDosObjetos[item - 1] <= peso) {
+                    // Caso aguente, verifica se o novo valor eh maior ou menor que o valor anterior. Pega o maior
+                    matriz[item][peso] = max(valoresDosObjetos[item - 1] + matriz[item - 1][peso - pesoDosObjetos[item - 1]],
+                            matriz[item - 1][peso]);
 
-		}
+                // se não agunetar, pega o valor anterior
+                } else {
 
-//		demais elementos
-		for (int item = 1; item <= numObjetos; item++) {
+                    matriz[item][peso] = matriz[item - 1][peso];
 
-			//linha a linha
+                }
 
-			for (int peso = 1; peso <= capacidadeMochila; peso++) {
+            }
 
-				//Is the current items weight less than or equal to running weight
+        }
 
-				if (pesoDosObjetos[item - 1] <= peso) {
-					// verifica se a mochila aguenta o novo elemento
+        //Printa matriz
+        for (int[] linhas : matriz) {
 
-					matriz[item][peso] = Math.max(valoresDosObjetos[item - 1] + matriz[item - 1][peso - pesoDosObjetos[item - 1]],
-							matriz[item - 1][peso]);
+            for (int col : linhas) {
 
-				} else {
+                System.out.format("%5d", col);
 
-					matriz[item][peso] = matriz[item - 1][peso];
+            }
 
-				}
+            System.out.println();
 
-			}
+        }
+        
+        // TODO: pegar itens escolhidos
+        
+        
+        
+        
+        
+        
 
-		}
+        return matriz[numObjetos][capacidadeMochila];
 
-		//Printa matriz
+    }
 
-		for (int[] linhas : matriz) {
+    /**
+     * Funcao auxiliar que retorna o maximo dentre dois valores
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    static int max(int a, int b) {
 
-			for (int col : linhas) {
+        return (a > b) ? a : b;
 
-				System.out.format("%5d", col);
-
-			}
-
-			System.out.println();
-
-		}
-
-		return matriz[numObjetos][capacidadeMochila];
-
-	}
-
-
-	/**
-	 * Funcao auxiliar que retorna o maximo dentre dois valores
-	 *
-	 * @param a
-	 * @param b
-	 * @return
-	 */
-	static int max(int a, int b) {
-
-		return (a > b) ? a : b;
-
-	}
+    }
 }
